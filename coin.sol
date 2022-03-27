@@ -2,8 +2,14 @@ pragma solidity >= 0.7.0 <0.9.0;
 
 contract coin{
     address public minter;
-    mapping (address => uint) public balances;
+    mapping (address => uint) external balances;
+
+    modifier  onlyMinter() { 
+    	require (msg.sender==minter);
+    	_; 
+    }
     
+
     event sent(address from,address to,uint amount);
 
     constructor(){
@@ -11,9 +17,7 @@ contract coin{
     }
 
 
-    function mint(address reveiver , uint amount) public {
-         
-         require (msg.sender==minter);
+    function mint(address reveiver , uint amount) public onlyMinter{       
          require (amount <1e60);
          balances[reveiver] +=amount;
 
